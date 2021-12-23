@@ -1,5 +1,7 @@
 import * as React from 'react'
+import { useState } from 'react'
 import { Cell } from './Cell'
+import { LabelFormElement } from './LabelFormElement'
 import { Row } from './Row'
 
 // TODO: Get this from backend
@@ -12,57 +14,75 @@ const values = [
 ]
 
 export const Game = () => {
+    const [userWord, setUserWord] = useState('')
     return (
-        <div>
-            <Row>
-                <>
-                    {values.slice(0, 5).map((val, index) => {
-                        return <Cell value={val} id={index} key={index}/>
-                    })}
-                </>
-            </Row>
-            <Row>
-                <>
-                    {values.slice(5, 10).map((val, index) => {
-                        return <Cell value={val} id={index} key={index}/>
-                    })}
-                </>
-            </Row>
-            <Row>
-                <>
-                    {values.slice(10, 15).map((val, index) => {
-                        return <Cell value={val} id={index} key={index}/>
-                    })}
-                </>
-            </Row>
-            <Row>
-                <>
-                    {values.slice(15, 20).map((val, index) => {
-                        return <Cell value={val} id={index} key={index}/>
-                    })}
-                </>
-            </Row>
-            <Row>
-                <>
-                    {values.slice(20, 25).map((val, index) => {
-                        return <Cell value={val} id={index} key={index}/>
-                    })}
-                </>
-            </Row>
-            {/* {values.flatMap((val, index) => {
-                let lineBreak = null
-                if ((index + 1) % 5 === 0) {
-                    lineBreak = (
-                        <br />
-                    )
-                }
-                return (
+        <>
+            <div style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center'
+            }}>
+                <Row>
                     <>
-                        <Cell value={val} id={index} key={index}/>
-                        {lineBreak}
+                        {values.slice(0, 5).map((val, index) => {
+                            return <Cell value={val} id={index} key={index}/>
+                        })}
                     </>
-                )
-            })} */}
-        </div>
+                </Row>
+                <Row>
+                    <>
+                        {values.slice(5, 10).map((val, index) => {
+                            return <Cell value={val} id={index} key={index}/>
+                        })}
+                    </>
+                </Row>
+                <Row>
+                    <>
+                        {values.slice(10, 15).map((val, index) => {
+                            return <Cell value={val} id={index} key={index}/>
+                        })}
+                    </>
+                </Row>
+                <Row>
+                    <>
+                        {values.slice(15, 20).map((val, index) => {
+                            return <Cell value={val} id={index} key={index}/>
+                        })}
+                    </>
+                </Row>
+                <Row>
+                    <>
+                        {values.slice(20, 25).map((val, index) => {
+                            return <Cell value={val} id={index} key={index}/>
+                        })}
+                    </>
+                </Row>
+            </div>
+            <form style={{
+                paddingTop: '30px'
+            }}>
+                <LabelFormElement labelText='Enter a word'>
+                    <input
+                        style={{
+                            fontSize: '32px'
+                        }}
+                        onChange={(e) => {
+                            const value = e.target.value
+                            setUserWord(value)
+                        }}
+                        value={userWord}
+                    />
+                </LabelFormElement>
+                <button
+                    onClick={(e) => {
+                        e.preventDefault()
+                        console.log(`Sending to backend: ${userWord}`)
+                        setUserWord('')
+                    }}
+                >
+                    Submit
+                </button>
+            </form>
+        </>
     )
 }

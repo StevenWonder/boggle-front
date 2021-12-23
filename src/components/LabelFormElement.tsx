@@ -2,17 +2,18 @@ import * as React from "react"
 
 interface Props { 
     labelText: string
+    children: JSX.Element
 }
 
-export const InputWithLabel = (props: Props) => {
-    const { labelText } = props
+export const LabelFormElement = (props: Props) => {
+    const { labelText, children } = props
     return (
         <div>
             <div>
                 <label>{labelText}</label>
             </div>
             <div>
-                <input />
+                {children}
             </div>
         </div>
     )

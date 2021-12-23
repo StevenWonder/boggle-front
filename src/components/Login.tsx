@@ -1,5 +1,5 @@
 import * as React from "react"
-import { InputWithLabel } from "./InputWithLabel"
+import { LabelFormElement } from "./LabelFormElement"
 
 interface Props {
     onClick: () => void
@@ -16,11 +16,15 @@ export const Login = (props: Props) => {
             </h1>
 
             <div style={{ paddingBottom: PADDING }}>
-                <InputWithLabel labelText="Enter your name" />
+                <LabelFormElement labelText="Enter your name">
+                    <input />
+                </LabelFormElement>
             </div>
 
             <div style={{ paddingBottom: PADDING }}>
-                <InputWithLabel labelText="Enter code to join game" />
+                <LabelFormElement labelText="Enter code to join game">
+                    <input />
+                </LabelFormElement>
             </div>
 
             <div style={{ paddingBottom: PADDING }}>
