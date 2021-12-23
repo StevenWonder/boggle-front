@@ -1,8 +1,11 @@
 import * as React from "react"
+import { InputWithLabel } from "./InputWithLabel"
 
 interface Props {
     onClick: () => void
 }
+
+const PADDING = 30
 
 export const Login = (props: Props) => {
     const { onClick } = props
@@ -11,18 +14,21 @@ export const Login = (props: Props) => {
             <h1>
                 Welcome to Boggle app
             </h1>
-            <div>
-                <label> Enter your name</label>
-                <input />
+
+            <div style={{ paddingBottom: PADDING }}>
+                <InputWithLabel labelText="Enter your name" />
             </div>
 
-            <div>
-                <label> Enter code to join game</label>
-                <input />
+            <div style={{ paddingBottom: PADDING }}>
+                <InputWithLabel labelText="Enter code to join game" />
             </div>
 
-            <div>
+            <div style={{ paddingBottom: PADDING }}>
                 <button title="Create new game" onClick={onClick}>Create new game</button>
+            </div>
+            
+            <div style={{ paddingBottom: PADDING }}>
+                <button title="Join game" onClick={onClick}>Join game</button>
             </div>
         </div>
     )
