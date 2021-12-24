@@ -27,12 +27,14 @@ export const Game = () => {
         if (userWord.length > 0) {
             const chains = getChains2(cells, userWord)
             const activeCells : number[] = []
-            chains.forEach((chain) => {
-                chain.forEach((cell) => {
+            // Only display one chain. It's better UX
+            // TODO: Validate this point with some beta testers
+            if (chains.length > 0) {
+                chains[0].forEach((cell) => {
                     activeCells.push(cell.id)
                 })
-            })
-            setHighlights(activeCells)
+                setHighlights(activeCells)
+            }
         } else {
             setHighlights([])
         }
