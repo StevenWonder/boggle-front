@@ -34,6 +34,8 @@ export const Game = () => {
                     activeCells.push(cell.id)
                 })
                 setHighlights(activeCells)
+            } else {
+                setHighlights([])    
             }
         } else {
             setHighlights([])
