@@ -1,6 +1,9 @@
 import * as React from 'react'
 import { useState } from 'react'
+
+import { useCounter } from '../hooks/counter'
 import { generateGame } from '../utils/game'
+
 import { Cell } from './Cell'
 import { LabelFormElement } from './LabelFormElement'
 import { Row } from './Row'
@@ -17,6 +20,7 @@ const cells = generateGame()
 
 export const Game = () => {
     const [userWord, setUserWord] = useState('')
+    const { count } = useCounter()
     return (
         <>
             <div style={{
@@ -24,45 +28,21 @@ export const Game = () => {
                 flexDirection: 'column',
                 alignItems: 'center'
             }}>
-                <Row>
-                    <>
-                        {cells.slice(0, 5).map((cell, index) => {
-                            return <Cell value={cell.value} id={index} key={index}/>
-                        })}
-                    </>
-                </Row>
-                <Row>
-                    <>
-                        {cells.slice(5, 10).map((cell, index) => {
-                            return <Cell value={cell.value} id={index} key={index}/>
-                        })}
-                    </>
-                </Row>
-                <Row>
-                    <>
-                        {cells.slice(10, 15).map((cell, index) => {
-                            return <Cell value={cell.value} id={index} key={index}/>
-                        })}
-                    </>
-                </Row>
-                <Row>
-                    <>
-                        {cells.slice(15, 20).map((cell, index) => {
-                            return <Cell value={cell.value} id={index} key={index}/>
-                        })}
-                    </>
-                </Row>
-                <Row>
-                    <>
-                        {cells.slice(20, 25).map((cell, index) => {
-                            return <Cell value={cell.value} id={index} key={index}/>
-                        })}
-                    </>
-                </Row>
+                {
+                    [0, 5, 10, 15, 20].map((val) => {
+                        return (
+                            <Row>
+                                <>
+                                    {cells.slice(val, val + 5).map((cell, index) => {
+                                        return <Cell value={cell.value} id={index} key={index}/>
+                                    })}
+                                </>
+                            </Row>                            
+                        )
+                    })
+                }
             </div>
-            <form style={{
-                paddingTop: '30px'
-            }}>
+            <form style={{ paddingTop: '30px' }}>
                 <LabelFormElement labelText='Enter a word'>
                     <input
                         style={{
@@ -85,6 +65,9 @@ export const Game = () => {
                     Submit
                 </button>
             </form>
+            <div>
+                <p>Time left: {Math.floor(count / 60)}:{count % 60 < 10 ? `0${count % 60}`: count % 60}</p>
+            </div>
         </>
     )
 }
