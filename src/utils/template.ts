@@ -1,19 +1,15 @@
-interface Cell {
-    id: number,
-    value: string,
-    links: number[]
-}
+import { Cell } from "./types"
 
 const TWENTY_FIVE = (function() {
-    let result : number[] = []
+    const result : number[] = []
     for (let i = 1; i < 26; i++) {
-        result = [...result, i]
+        result.push(i)
     }
     return result
 })()
 
 const addLink = (cell: Cell, num: number) => {
-    cell.links = [...cell.links, num]
+    cell.links.push(num)
 }
 
 const rightLink = (cells: Cell[]) => {
@@ -73,13 +69,13 @@ const without = <T>(array: T[], removes: T[]) : T[] => {
 }
 
 export const getCells = () => {
-    let cells : Cell[] = []
+    const cells : Cell[] = []
     for (let i = 1; i < 26; i++) {
-        cells = [...cells, {
+        cells.push({
             id: i,
             value: 'TODO',
             links: []
-        }]
+        })
     }
 
     leftLink(cellsWithId(cells, without(TWENTY_FIVE, [1, 6, 11, 16, 21])))

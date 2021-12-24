@@ -1,7 +1,8 @@
 import * as React from 'react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { useCounter } from '../hooks/counter'
+import { getChains2 } from '../utils/chain'
 import { generateGame } from '../utils/game'
 
 import { Cell } from './Cell'
@@ -20,7 +21,22 @@ const cells = generateGame()
 
 export const Game = () => {
     const [userWord, setUserWord] = useState('')
+    const [highlights, setHighlights] = useState<number[]>([])
     const { count } = useCounter()
+    useEffect(() => {
+        if (userWord.length > 0) {
+            const chains = getChains2(cells, userWord)
+            const activeCells : number[] = []
+            chains.forEach((chain) => {
+                chain.forEach((cell) => {
+                    activeCells.push(cell.id)
+                })
+            })
+            setHighlights(activeCells)
+        } else {
+            setHighlights([])
+        }
+    }, [userWord])
     return (
         <>
             <div style={{
@@ -33,8 +49,15 @@ export const Game = () => {
                         return (
                             <Row>
                                 <>
-                                    {cells.slice(val, val + 5).map((cell, index) => {
-                                        return <Cell value={cell.value} id={index} key={index}/>
+                                    {cells.slice(val, val + 5).map((cell) => {
+                                        return (
+                                            <Cell
+                                                value={cell.value}
+                                                id={cell.id}
+                                                key={cell.id}
+                                                status={highlights.includes(cell.id) ? 'HIGHLIGHTED' : 'NORMAL'}
+                                            />
+                                        )
                                     })}
                                 </>
                             </Row>                            

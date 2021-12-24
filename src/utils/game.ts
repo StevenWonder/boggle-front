@@ -25,7 +25,7 @@ const getProbabilities = () => {
         ...range('N',6),
         ...range('O',8),
         ...range('P',2),
-        ...range('Q',1),
+        ...range('Q',1), // TODO: Make a QU together
         ...range('R',6),
         ...range('S',5),
         ...range('T',6),
@@ -39,9 +39,9 @@ const getProbabilities = () => {
 }
 
 const range = (val: string, length: number) : string[] => {
-    let result : string[] = []
+    const result : string[] = []
     for (let i = 0; i < length; i++) {
-        result = [...result, val]
+        result.push(val)
     }
     return result
 }
@@ -49,7 +49,7 @@ const range = (val: string, length: number) : string[] => {
 export const generateGame = () => {
     const cells = getCells()
     const probabilities = getProbabilities()
-    console.log(probabilities.length)
+
     cells.forEach((cell) => {
         const randomNumber = Math.floor(Math.random() * 100)
         cell.value = probabilities[randomNumber]

@@ -20,7 +20,7 @@ interface Props extends Link {
 }
 
 export const Cell = (props: Props) => {
-    const { value } = props
+    const { status, value } = props
     return (
         <div style={{
             height: 100,
@@ -30,7 +30,8 @@ export const Cell = (props: Props) => {
             borderStyle: 'solid',
             display: 'flex',
             alignContent: 'center',
-            justifyContent: 'center'
+            justifyContent: 'center',
+            backgroundColor: status === 'HIGHLIGHTED' ? 'green' : undefined
         }}>
             <p style={{
                 fontSize: 64,
