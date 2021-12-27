@@ -9,17 +9,19 @@ type Mode = 'LOGIN' | 'GAME'
 function App() {
   const [mode, setMode] = useState<Mode>('LOGIN')
   const [sessionId, setSessionId] = useState('')
+  const [name, setName] = useState('')
   return (
     <div className="App">
       {mode === 'LOGIN' ? (
         <Login
-          onSuccess={(id: string) => {
+          onSuccess={(id: string, name: string) => {
             setSessionId(id)
+            setName(name)
             setMode('GAME')
           }}
         />
       ) : (
-        <Game sessionId={sessionId}/>
+        <Game sessionId={sessionId} name={name}/>
       )}
     </div>
   );

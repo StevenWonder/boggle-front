@@ -4,7 +4,7 @@ import axios from 'axios'
 import { LabelFormElement } from "./LabelFormElement"
 
 interface Props {
-    onSuccess: (id: string) => void
+    onSuccess: (id: string, name: string) => void
 }
 
 const PADDING = 30
@@ -19,7 +19,7 @@ export const Login = (props: Props) => {
         try {
             const result = await axios.post('/sessions', undefined)
             setFailure('')
-            onSuccess(result.data.sessionId)
+            onSuccess(result.data.sessionId, name)
         } catch (e) {
             setFailure('Error creating game')
         }
@@ -29,7 +29,7 @@ export const Login = (props: Props) => {
         try {
             await axios.get(`/sessions/${sessionId}`, undefined)
             setFailure('')
-            onSuccess(sessionId)
+            onSuccess(sessionId, name)
         } catch (e) {
             setFailure('Session not found. Try again')
         }
