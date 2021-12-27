@@ -1,6 +1,6 @@
-import { Cell } from "./types";
+import { CellType } from "./types";
 
-type Chain = Cell[]
+type Chain = CellType[]
 type ChainList = Chain[]
 
 const filterInvalidChains = (chains: ChainList, length: number) : ChainList => {
@@ -21,11 +21,11 @@ const filterInvalidChains = (chains: ChainList, length: number) : ChainList => {
     })
 }
 
-export const isValidChain = (cells: Cell[], chain: string) : boolean => {
+export const isValidChain = (cells: CellType[], chain: string) : boolean => {
     return false // TODO
 }
 
-const extend = (cells: Cell[], chains: ChainList, char: string) : ChainList => {
+const extend = (cells: CellType[], chains: ChainList, char: string) : ChainList => {
     const newChains : ChainList = []
     for (let i = 0; i < chains.length; i++) {
         const chain = chains[i]
@@ -44,7 +44,7 @@ const extend = (cells: Cell[], chains: ChainList, char: string) : ChainList => {
     return newChains
 }
 
-export const getChains2 = (cells: Cell[], word: string) : ChainList => {
+export const getChains2 = (cells: CellType[], word: string) : ChainList => {
     let chains : ChainList = []
 
     const initialCells = cells.filter((cell) => cell.value === word[0].toUpperCase()) // [11, 14]
@@ -65,7 +65,7 @@ export const getChains2 = (cells: Cell[], word: string) : ChainList => {
     return chains
 }
 
-export const getChains = (cells: Cell[], word: string) : number[][] => {
+export const getChains = (cells: CellType[], word: string) : number[][] => {
     let chains : number[][] = []
     // for (let i = 0; i < word.length; i++) {
     //     if (i === 0) {

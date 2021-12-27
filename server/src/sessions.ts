@@ -1,4 +1,4 @@
-import { Session } from "./types"
+import { Game, Session } from "./types"
 
 const sessions : Session[] = []
 
@@ -14,5 +14,12 @@ export const removeSession = (id: string) => {
     const index = sessions.findIndex((session) => session.id === id)
     if (index !== -1) {
         sessions.splice(index, 1)
+    }
+}
+
+export const newGame = (game: Game, sessionId: string) => {
+    const session = findSession(sessionId)
+    if (session) {
+        session.game = game
     }
 }

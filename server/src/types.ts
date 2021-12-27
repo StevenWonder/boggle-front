@@ -1,4 +1,12 @@
+export type Game = Cell[]
+
 export interface Session {
     id: string
-    games: string[]
+    game: Game
+}
+
+export interface Cell {
+    id: number,
+    value: string,
+    links: number[]
 }

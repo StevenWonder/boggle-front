@@ -22,8 +22,8 @@ export const useCounter = (initialCount: number = DEFAULT_INITIAL_COUNTDOWN) => 
       }, ONE_SECOND_MS)
     }
   
-    const restartCountdown = () => {
-      setCount(initialCount)
+    const restartCountdown = (val: number = initialCount) => {
+      setCount(val)
     }
   
     return { count, restartCountdown }

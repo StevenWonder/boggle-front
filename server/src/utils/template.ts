@@ -1,4 +1,4 @@
-import { Cell } from "./types"
+import { Cell } from "../types"
 
 const TWENTY_FIVE = (function() {
     const result : number[] = []

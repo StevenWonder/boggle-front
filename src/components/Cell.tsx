@@ -21,6 +21,16 @@ interface Props extends Link {
 
 export const Cell = (props: Props) => {
     const { status, value } = props
+    const getColour = () => {
+        switch (status) {
+            case 'GREY':
+                return 'grey'
+            case 'HIGHLIGHTED':
+                return 'green'
+            default:
+                return undefined
+        }
+    }
     return (
         <div style={{
             height: 100,
@@ -31,7 +41,7 @@ export const Cell = (props: Props) => {
             display: 'flex',
             alignContent: 'center',
             justifyContent: 'center',
-            backgroundColor: status === 'HIGHLIGHTED' ? 'green' : undefined
+            backgroundColor: getColour()
         }}>
             <p style={{
                 fontSize: 64,
