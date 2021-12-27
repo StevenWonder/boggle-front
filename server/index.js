@@ -5,7 +5,6 @@ const app = express(); // create express app
 
 // When you use the root route, return the index.html file from public folder.
 app.use(express.static(path.join(__dirname, "..", "build")));
-app.use(express.static("public"));
 
 // start express server on port 5000
 app.listen(5000, () => {
