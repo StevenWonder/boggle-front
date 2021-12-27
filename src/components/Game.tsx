@@ -9,6 +9,10 @@ import { Cell } from './Cell'
 import { LabelFormElement } from './LabelFormElement'
 import { Row } from './Row'
 
+interface Props {
+    sessionId: string
+}
+
 // TODO: Get this from backend
 // const values = [
 //     'e', 't', 'r', 'c', 'h',
@@ -19,7 +23,8 @@ import { Row } from './Row'
 // ]
 const cells = generateGame()
 
-export const Game = () => {
+export const Game = (props: Props) => {
+    const { sessionId } = props
     const [userWord, setUserWord] = useState('')
     const [highlights, setHighlights] = useState<number[]>([])
     const { count } = useCounter()
@@ -94,6 +99,7 @@ export const Game = () => {
             </form>
             <div>
                 <p>Time left: {Math.floor(count / 60)}:{count % 60 < 10 ? `0${count % 60}`: count % 60}</p>
+                <p>session id to move later on: {sessionId}</p>
             </div>
         </>
     )
