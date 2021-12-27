@@ -16,15 +16,18 @@ const io = new Server(server);
 app.use(express.static(path.join(__dirname, "../..", "build")));
 
 io.on('connection', (socket) => {
-  console.log('a user connected');
+  console.log(`${socket.id} connected`);
   socket.on('disconnect', () => {
-    console.log('user disconnected');
+    console.log(`${socket.id} disconnected`);
   });
 
   socket.on('new game', (sessionId) => {
     console.log(`New game. sessionId: ${sessionId}`)
     const game = generateGame()
-    socket.emit('new game created', game)
+    io.emit('new game created', {
+      game,
+      sessionId
+    })
   })
 });
 

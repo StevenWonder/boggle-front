@@ -17,6 +17,11 @@ interface Props {
     name: string
 }
 
+interface NewGame {
+    game: CellType[]
+    sessionId: string
+}
+
 let socket : ReturnType<typeof io>
 
 export const Game = (props: Props) => {
@@ -51,12 +56,15 @@ export const Game = (props: Props) => {
     }, [])
 
     useEffect(() => {
-        socket.on('new game created', (newGame: CellType[]) => {
-            setGame(newGame)
-            setActive(true)
-            restartCountdown(180)
+        socket.on('new game created', (response: NewGame) => {
+            console.log(`new game created. SessionId: ${response.sessionId}`)
+            if (sessionId === response.sessionId) {
+                setGame(response.game)
+                setActive(true)
+                restartCountdown(180)
+            }
         })
-    }, [restartCountdown])
+    }, [restartCountdown, sessionId])
 
     useEffect(() => {
         if (count === 0) {
@@ -65,7 +73,7 @@ export const Game = (props: Props) => {
         }
     }, [count])
 
-    const newGame = () => {
+    const startNewGame = () => {
         setGame(placeholderGame)
         setActive(false)
         socket.emit('new game', sessionId)
@@ -129,7 +137,7 @@ export const Game = (props: Props) => {
                 <div>
                     <p>Time left: {Math.floor(count / 60)}:{count % 60 < 10 ? `0${count % 60}`: count % 60}</p>
                     {(count === 0 || count === undefined) &&
-                        <button onClick={newGame}> New game </button>
+                        <button onClick={startNewGame}> New game </button>
                     }
                 </div>
             </div>
