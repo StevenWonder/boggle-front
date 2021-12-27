@@ -8,16 +8,18 @@ type Mode = 'LOGIN' | 'GAME'
 
 function App() {
   const [mode, setMode] = useState<Mode>('LOGIN')
+  const [sessionId, setSessionId] = useState('')
   return (
     <div className="App">
       {mode === 'LOGIN' ? (
         <Login
-          onClick={() => {
+          onSuccess={(id: string) => {
+            setSessionId(id)
             setMode('GAME')
           }}
         />
       ) : (
-        <Game />
+        <Game sessionId={sessionId}/>
       )}
     </div>
   );
