@@ -1,3 +1,4 @@
+import * as axios from "axios"
 import * as express from "express"
 import * as path from "path"
 import * as http from "http"
@@ -11,6 +12,11 @@ import { generateGame } from "./utils/game";
 const app = express(); // create express app
 const server = http.createServer(app);
 const io = new Server(server);
+
+const VALIDATION_URL = 'https://api.dictionaryapi.dev/api/v2/entries/en_US'
+
+// Parse incoming JSON to an object
+app.use(express.json())
 
 // When you use the root route, return the index.html file from public folder.
 app.use(express.static(path.join(__dirname, "../..", "build")));
@@ -54,6 +60,26 @@ app.post('/sessions', (req, res) => {
 
   res.send({
     sessionId
+  })
+})
+
+app.post('/words', async (req, res) => {
+  let isValid = false
+  try {
+    const { word } = req.body
+    if (word) {
+      const lowercaseWord = word.toLowerCase()
+      const result = await axios.default.get(`${VALIDATION_URL}/${lowercaseWord}`)
+      const data : any[] = result.data
+      if (data.length && data.length > 0 && data[0].word === lowercaseWord) {
+        isValid = true
+      }
+    } 
+  } catch (e) {
+    // Handle error
+  }
+  res.send({
+    isValid
   })
 })
 
