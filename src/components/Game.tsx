@@ -1,3 +1,4 @@
+import axios from 'axios'
 import * as React from 'react'
 import { useEffect, useState } from 'react'
 import io from 'socket.io-client'
@@ -10,6 +11,7 @@ import { CellType } from '../utils/types'
 import { Cell } from './Cell'
 import { LabelFormElement } from './LabelFormElement'
 import { LeftPanel } from './LeftPanel'
+import { Results } from './Results'
 import { Row } from './Row'
 
 interface Props {
@@ -22,6 +24,13 @@ interface NewGame {
     sessionId: string
 }
 
+interface ResultsType {
+    words: {
+        [key: string]: string[]
+    }
+    sessionId: string
+}
+
 let socket : ReturnType<typeof io>
 
 export const Game = (props: Props) => {
@@ -29,7 +38,9 @@ export const Game = (props: Props) => {
     const [userWord, setUserWord] = useState('')
     const [highlights, setHighlights] = useState<number[]>([])
     const [game, setGame] = useState<CellType[]>(placeholderGame)
+    const [results, setResults] = useState<ResultsType['words']>({})
     const [active, setActive] = useState(false)
+    const [showResults, setShowResults] = useState(false)
     const { count, restartCountdown } = useCounter(0)
 
     useEffect(() => {
@@ -64,6 +75,13 @@ export const Game = (props: Props) => {
                 restartCountdown(180)
             }
         })
+
+        socket.on('results', (response: ResultsType) => {
+            if (sessionId === response.sessionId) {
+                setShowResults(true)
+                setResults(response.words)
+            }
+        })
     }, [restartCountdown, sessionId])
 
     useEffect(() => {
@@ -79,7 +97,22 @@ export const Game = (props: Props) => {
         socket.emit('new game', sessionId)
     }
 
+    const submitWord = (word: string) => {
+        axios.post('/words', {
+            name,
+            word
+        }, {
+            headers: {
+                sessionid: sessionId
+            }
+        })
+    }
+
     return (
+        <>
+        {showResults === true && <Results words={results} onClose={() => {
+            setShowResults(false)
+        }}/>}
         <div style={{ display: 'flex', flexDirection: 'row'}}>
             <div>
                 <LeftPanel name={name} id={sessionId}/>
@@ -128,6 +161,7 @@ export const Game = (props: Props) => {
                         onClick={(e) => {
                             e.preventDefault()
                             console.log(`Sending to backend: ${userWord}`)
+                            submitWord(userWord)
                             setUserWord('')
                         }}
                     >
@@ -142,5 +176,6 @@ export const Game = (props: Props) => {
                 </div>
             </div>
         </div>
+        </>
     )
 }

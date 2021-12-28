@@ -8,6 +8,7 @@ import { addSession, findSession } from "./sessions";
 import { Session } from "./types";
 import { randomNumber } from "./utils/random";
 import { generateGame } from "./utils/game";
+import { addWord, createWordList, getWords } from "./utils/words"
 
 const app = express(); // create express app
 const server = http.createServer(app);
@@ -34,6 +35,14 @@ io.on('connection', (socket) => {
       game,
       sessionId
     })
+
+    setTimeout(() => {
+      io.emit('results', {
+        words: getWords(sessionId),
+        sessionId
+      })
+    }, 3 * 60 * 1000)
+
   })
 });
 
@@ -57,6 +66,7 @@ app.post('/sessions', (req, res) => {
     id: sessionId
   }
   addSession(newSession)
+  createWordList(sessionId)
 
   res.send({
     sessionId
@@ -66,13 +76,19 @@ app.post('/sessions', (req, res) => {
 app.post('/words', async (req, res) => {
   let isValid = false
   try {
-    const { word } = req.body
-    if (word) {
+    const { word, name } = req.body
+    if (word && name) {
+      console.log(`validating word: ${word}`)
       const lowercaseWord = word.toLowerCase()
       const result = await axios.default.get(`${VALIDATION_URL}/${lowercaseWord}`)
       const data : any[] = result.data
-      if (data.length && data.length > 0 && data[0].word === lowercaseWord) {
+      if (data.length && data.length > 0) {
         isValid = true
+        const { sessionid } = req.headers
+        console.log('session id header' + sessionid)
+        if (sessionid && typeof sessionid === 'string') {
+          addWord(sessionid, name, lowercaseWord)
+        }
       }
     } 
   } catch (e) {
