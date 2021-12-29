@@ -12,6 +12,7 @@ import { Cell } from './Cell'
 import { LabelFormElement } from './LabelFormElement'
 import { LeftPanel } from './LeftPanel'
 import { Results } from './Results'
+import { RightPanel } from './RightPanel'
 import { Row } from './Row'
 
 interface Props {
@@ -36,6 +37,7 @@ let socket : ReturnType<typeof io>
 export const Game = (props: Props) => {
     const { sessionId, name } = props
     const [userWord, setUserWord] = useState('')
+    const [words, setWords] = useState<string[]>([])
     const [highlights, setHighlights] = useState<number[]>([])
     const [game, setGame] = useState<CellType[]>(placeholderGame)
     const [results, setResults] = useState<ResultsType['words']>({})
@@ -95,17 +97,32 @@ export const Game = (props: Props) => {
         setGame(placeholderGame)
         setActive(false)
         socket.emit('new game', sessionId)
+        // REMOVE
+        // setActive(true)
+        // restartCountdown(180)
     }
 
-    const submitWord = (word: string) => {
-        axios.post('/words', {
-            name,
-            word
-        }, {
-            headers: {
-                sessionid: sessionId
+    const submitWord = async (word: string) => {
+        try {
+            const response = await axios.post('/words', {
+                name,
+                word
+            }, {
+                headers: {
+                    sessionid: sessionId
+                }
+            })
+            if (response.data.isValid === true) {
+                setWords(
+                    (words) => {
+                        words.push(word)
+                        return words
+                    }
+                )
             }
-        })
+        } catch (e) {
+            // Handle error
+        }
     }
 
     return (
@@ -174,6 +191,9 @@ export const Game = (props: Props) => {
                         <button onClick={startNewGame}> New game </button>
                     }
                 </div>
+            </div>
+            <div>
+                <RightPanel words={words} />
             </div>
         </div>
         </>
