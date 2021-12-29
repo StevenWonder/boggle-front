@@ -16,6 +16,7 @@ const server = http.createServer(app);
 const io = new Server(server);
 
 const VALIDATION_URL = 'https://api.dictionaryapi.dev/api/v2/entries/en_US'
+const port = process.env.PORT || 5000 // used for heroku
 
 // Parse incoming JSON to an object
 app.use(express.json())
@@ -112,6 +113,6 @@ app.post('/words', async (req, res) => {
 })
 
 // start express server on port 5000
-server.listen(5000, () => {
-  console.log("server started on port 5000");
+server.listen(port, () => {
+  console.log(`Server is up on port ${port}`)
 });
