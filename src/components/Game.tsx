@@ -183,6 +183,7 @@ export const Game = (props: Props) => {
                             submitWord(userWord)
                             setUserWord('')
                         }}
+                        disabled={userWord.length < 4 || highlights.length < 4}
                     >
                         Submit
                     </button>
