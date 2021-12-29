@@ -22,7 +22,7 @@ const port = process.env.PORT || 5000 // used for heroku
 app.use(express.json())
 
 // When you use the root route, return the index.html file from public folder.
-app.use(express.static(path.join(__dirname, "../..", "build")));
+app.use(express.static(path.join(__dirname, "../../..", "build")));
 
 io.on('connection', (socket) => {
   console.log(`${socket.id} connected`);
