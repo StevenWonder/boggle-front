@@ -8,7 +8,7 @@ import { addSession, findSession } from "./sessions";
 import { Session } from "./types";
 import { randomNumber } from "./utils/random";
 import { generateGame } from "./utils/game";
-import { addWord, createWordList, getWords } from "./utils/words"
+import { addWord, createWordList, getPoints, getWords } from "./utils/words"
 
 const app = express(); // create express app
 const server = http.createServer(app);
@@ -75,8 +75,9 @@ app.post('/sessions', (req, res) => {
 
 app.post('/words', async (req, res) => {
   let isValid = false
+  let reason = 'Unknown error'
+  const { word, name } = req.body
   try {
-    const { word, name } = req.body
     if (word && name) {
       console.log(`validating word: ${word}`)
       const lowercaseWord = word.toLowerCase()
@@ -87,15 +88,25 @@ app.post('/words', async (req, res) => {
         const { sessionid } = req.headers
         console.log('session id header' + sessionid)
         if (sessionid && typeof sessionid === 'string') {
-          addWord(sessionid, name, lowercaseWord)
+          const added = addWord(sessionid, name, lowercaseWord)
+          if (!added) {
+            reason = 'duplicate'
+            isValid = false
+          }
         }
       }
     } 
-  } catch (e) {
-    // Handle error
+  } catch (error) {
+    const { response } = error
+    if (response.status === 404 && response.data.title === 'No Definitions Found') {
+      reason = 'not a word'
+    }
   }
   res.send({
-    isValid
+    isValid,
+    reason: isValid ? undefined : reason,
+    word,
+    points: isValid && Boolean(word) ? getPoints(word) : 0
   })
 })
 

@@ -1,4 +1,4 @@
-import { CellType } from "./types";
+import { CellType } from "../types";
 
 type Chain = CellType[]
 type ChainList = Chain[]

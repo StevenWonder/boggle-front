@@ -1,11 +1,12 @@
 import * as React from 'react'
+import { WordResult } from '../types'
 
 interface Props {
-    words: string[]
+    wordResults: WordResult[]
 }
 
 export const RightPanel = (props: Props) => {
-    const { words } = props
+    const { wordResults } = props
 
     return (
         <div
@@ -19,10 +20,11 @@ export const RightPanel = (props: Props) => {
                 backgroundColor: 'lightgray'
             }}
         >
-            {words.map((word) => {
+            {wordResults.map((wordResult) => {
+                const { word, points, reason, isValid } = wordResult
                 return (
                     <>
-                        <span>{word}</span>
+                        <span style={{ color: reason === 'not a word' ? 'red' : undefined }}>{word}</span>: <span>{points}</span>
                         <br/>
                     </>
                 )

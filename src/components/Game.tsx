@@ -7,7 +7,7 @@ import { useCounter } from '../hooks/counter'
 import { getChains2 } from '../utils/chain'
 import { placeholderGame } from '../utils/game'
 import { rotate } from '../utils/rotate'
-import { CellType } from '../utils/types'
+import { CellType, WordResult } from '../types'
 
 import { Cell } from './Cell'
 import { LabelFormElement } from './LabelFormElement'
@@ -38,7 +38,7 @@ let socket : ReturnType<typeof io>
 export const Game = (props: Props) => {
     const { sessionId, name } = props
     const [userWord, setUserWord] = useState('')
-    const [words, setWords] = useState<string[]>([])
+    const [words, setWords] = useState<WordResult[]>([])
     const [highlights, setHighlights] = useState<number[]>([])
     const [game, setGame] = useState<CellType[]>(placeholderGame)
     const [results, setResults] = useState<ResultsType['words']>({})
@@ -105,7 +105,7 @@ export const Game = (props: Props) => {
 
     const submitWord = async (word: string) => {
         try {
-            const response = await axios.post('/words', {
+            const response = await axios.post<WordResult>('/words', {
                 name,
                 word
             }, {
@@ -113,10 +113,11 @@ export const Game = (props: Props) => {
                     sessionid: sessionId
                 }
             })
-            if (response.data.isValid === true) {
+            const { reason } = response.data
+            if (reason !== 'duplicate') {
                 setWords(
                     (words) => {
-                        words.push(word)
+                        words.push(response.data)
                         return words
                     }
                 )
@@ -199,7 +200,7 @@ export const Game = (props: Props) => {
                 </div>
             </div>
             <div>
-                <RightPanel words={words} />
+                <RightPanel wordResults={words} />
             </div>
         </div>
         </>

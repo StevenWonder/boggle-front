@@ -1,4 +1,4 @@
-import { CellType } from "./types";
+import { CellType } from "../types";
 
 const swap = (c1: CellType, c2: CellType, c3: CellType, c4: CellType) => {
     const buffer = c4.value
