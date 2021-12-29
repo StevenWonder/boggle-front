@@ -6,6 +6,7 @@ import io from 'socket.io-client'
 import { useCounter } from '../hooks/counter'
 import { getChains2 } from '../utils/chain'
 import { placeholderGame } from '../utils/game'
+import { rotate } from '../utils/rotate'
 import { CellType } from '../utils/types'
 
 import { Cell } from './Cell'
@@ -190,6 +191,11 @@ export const Game = (props: Props) => {
                     {(count === 0 || count === undefined) &&
                         <button onClick={startNewGame}> New game </button>
                     }
+                    <button onClick={(e) => {
+                        e.preventDefault()
+                        setUserWord('')
+                        rotate(game)
+                    }}>Rotate</button>
                 </div>
             </div>
             <div>
