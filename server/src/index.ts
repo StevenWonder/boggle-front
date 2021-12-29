@@ -9,6 +9,7 @@ import { Session } from "./types";
 import { randomNumber } from "./utils/random";
 import { generateGame } from "./utils/game";
 import { addWord, createWordList, getPoints, getWords } from "./utils/words"
+import { sort } from "./utils/sort"
 
 const app = express(); // create express app
 const server = http.createServer(app);
@@ -38,7 +39,7 @@ io.on('connection', (socket) => {
 
     setTimeout(() => {
       io.emit('results', {
-        words: getWords(sessionId),
+        words: sort(getWords(sessionId)),
         sessionId
       })
     }, 3 * 60 * 1000)
